@@ -537,14 +537,26 @@ function useInsuranceSearch(options) {
     },
     [check, suspendedText]
   );
-  const marked = useMemo4(() => result.options.map(mark), [result.options, mark]);
+  const cache = useMemo4(() => /* @__PURE__ */ new WeakMap(), [mark]);
+  const markCached = useCallback4(
+    (option) => {
+      let marked2 = cache.get(option);
+      if (!marked2) {
+        marked2 = mark(option);
+        cache.set(option, marked2);
+      }
+      return marked2;
+    },
+    [cache, mark]
+  );
+  const marked = useMemo4(() => result.options.map(markCached), [result.options, markCached]);
   const { getOptionById: baseGet } = result;
   const getOptionById = useCallback4(
     (id) => {
       const option = baseGet(id);
-      return option ? mark(option) : void 0;
+      return option ? markCached(option) : void 0;
     },
-    [baseGet, mark]
+    [baseGet, markCached]
   );
   return { ...result, options: marked, getOptionById };
 }

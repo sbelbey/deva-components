@@ -54,14 +54,29 @@ export function useInsuranceSearch<T extends InsuranceLike = InsuranceLike>(
     [check, suspendedText],
   );
 
-  const marked = useMemo(() => result.options.map(mark), [result.options, mark]);
+  // Una opción marcada por opción base, para que `getOptionById` devuelva siempre el mismo
+  // objeto: si cambia en cada render, MUI pisa con la etiqueta lo que se está tipeando.
+  const cache = useMemo(() => new WeakMap<SearchOption<T>, InsuranceOption<T>>(), [mark]);
+  const markCached = useCallback(
+    (option: SearchOption<T>) => {
+      let marked = cache.get(option);
+      if (!marked) {
+        marked = mark(option);
+        cache.set(option, marked);
+      }
+      return marked;
+    },
+    [cache, mark],
+  );
+
+  const marked = useMemo(() => result.options.map(markCached), [result.options, markCached]);
   const { getOptionById: baseGet } = result;
   const getOptionById = useCallback(
     (id: string | null | undefined) => {
       const option = baseGet(id);
-      return option ? mark(option) : undefined;
+      return option ? markCached(option) : undefined;
     },
-    [baseGet, mark],
+    [baseGet, markCached],
   );
 
   return { ...result, options: marked, getOptionById };

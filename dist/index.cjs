@@ -630,14 +630,26 @@ function useInsuranceSearch(options) {
     },
     [check, suspendedText]
   );
-  const marked = (0, import_react4.useMemo)(() => result.options.map(mark), [result.options, mark]);
+  const cache = (0, import_react4.useMemo)(() => /* @__PURE__ */ new WeakMap(), [mark]);
+  const markCached = (0, import_react4.useCallback)(
+    (option) => {
+      let marked2 = cache.get(option);
+      if (!marked2) {
+        marked2 = mark(option);
+        cache.set(option, marked2);
+      }
+      return marked2;
+    },
+    [cache, mark]
+  );
+  const marked = (0, import_react4.useMemo)(() => result.options.map(markCached), [result.options, markCached]);
   const { getOptionById: baseGet } = result;
   const getOptionById = (0, import_react4.useCallback)(
     (id) => {
       const option = baseGet(id);
-      return option ? mark(option) : void 0;
+      return option ? markCached(option) : void 0;
     },
-    [baseGet, mark]
+    [baseGet, markCached]
   );
   return { ...result, options: marked, getOptionById };
 }

@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.1] - 2026-10-08
+
+### Corregido
+- `useInsuranceSearch`: `getOptionById` y `options` devuelven el mismo objeto entre renders. Antes armaban uno nuevo cada vez, y en la piel MUI de DEVA eso pisaba con la etiqueta lo que se estaba tipeando.
+
 ## [1.0.0] - 2026-10-07
 
 ### Agregado

@@ -1,6 +1,6 @@
 {
   "name": "deva-components",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Hooks de búsqueda sin estilo de la familia DEVA (estudio, médico, diagnóstico, obra social, paciente, bioquímico, planilla)",
   "license": "UNLICENSED",
   "type": "module",
