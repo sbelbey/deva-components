@@ -171,6 +171,16 @@ describe('useInsuranceSearch', () => {
     expect(result.current.options.find((o) => o.id === 'i2')).toBe(first);
   });
 
+  it('getOptionById estable aunque isSuspended venga inline', () => {
+    const { result, rerender } = renderHook(() =>
+      useInsuranceSearch({ source: { items: insurances }, isSuspended: (i) => i.code === 30 }),
+    );
+    const first = result.current.getOptionById('i2');
+    expect(first?.suspended).toBe(true);
+    rerender();
+    expect(result.current.getOptionById('i2')).toBe(first);
+  });
+
   it('servidor', async () => {
     const search = vi.fn(async () => [{ id: 'x', code: 24, abbreviation: 'OSDE' }]);
     const { result } = renderHook(() =>

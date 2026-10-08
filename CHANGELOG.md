@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.2] - 2026-10-08
+
+### Corregido
+- `useInsuranceSearch`: `isSuspended` se lee por ref. Pasada como función inline ya no invalida el cache de opciones en cada render.
+
 ## [1.0.1] - 2026-10-08
 
 ### Corregido

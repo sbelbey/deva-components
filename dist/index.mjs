@@ -510,7 +510,7 @@ function insuranceToOption(insurance) {
 }
 
 // src/insurance/useInsuranceSearch.ts
-import { useCallback as useCallback4, useMemo as useMemo4 } from "react";
+import { useCallback as useCallback4, useMemo as useMemo4, useRef as useRef2 } from "react";
 function useInsuranceSearch(options) {
   const { toOption, suspendedCodes, isSuspended, suspendedText = "Suspendida", deps = [], ...rest } = options;
   const suspendedKey = (suspendedCodes != null ? suspendedCodes : []).join(",");
@@ -520,10 +520,15 @@ function useInsuranceSearch(options) {
     deps: [suspendedKey, ...deps],
     toOption: toOption != null ? toOption : insuranceToOption
   });
+  const isSuspendedRef = useRef2(isSuspended);
+  isSuspendedRef.current = isSuspended;
   const check = useCallback4(
-    (item) => isSuspended ? isSuspended(item) : isInsuranceSuspended(item, suspendedCodes),
+    (item) => {
+      const fn = isSuspendedRef.current;
+      return fn ? fn(item) : isInsuranceSuspended(item, suspendedCodes);
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isSuspended, suspendedKey]
+    [suspendedKey]
   );
   const mark = useCallback4(
     (option) => {

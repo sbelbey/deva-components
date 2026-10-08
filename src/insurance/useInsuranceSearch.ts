@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { useSearch } from '../core/useSearch';
 import type { EntitySearchOptions } from '../core/entity';
 import type { SearchOption, SearchResult } from '../core/types';
@@ -37,10 +37,17 @@ export function useInsuranceSearch<T extends InsuranceLike = InsuranceLike>(
     toOption: toOption ?? insuranceToOption,
   });
 
+  // `isSuspended` se lee por ref: si el consumidor la pasa inline, cambiaría en cada render,
+  // invalidaría el cache de opciones y MUI volvería a pisar lo que se está tipeando.
+  const isSuspendedRef = useRef(isSuspended);
+  isSuspendedRef.current = isSuspended;
   const check = useCallback(
-    (item: T) => (isSuspended ? isSuspended(item) : isInsuranceSuspended(item, suspendedCodes)),
+    (item: T) => {
+      const fn = isSuspendedRef.current;
+      return fn ? fn(item) : isInsuranceSuspended(item, suspendedCodes);
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isSuspended, suspendedKey],
+    [suspendedKey],
   );
   const mark = useCallback(
     (option: SearchOption<T>): InsuranceOption<T> => {

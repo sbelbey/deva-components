@@ -11,7 +11,7 @@ Diseño: [deva-design/docs/specs/2026-10-07-deva-components-diseno.md](https://g
 ## Instalar
 
 ```bash
-npm install github:sbelbey/deva-components#v1.0.1
+npm install github:sbelbey/deva-components#v1.0.2
 ```
 
 `dist/` está commiteado, así que se instala sin build, igual que `deva-design`. Fijá siempre un tag.

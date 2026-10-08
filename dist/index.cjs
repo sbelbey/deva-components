@@ -613,10 +613,15 @@ function useInsuranceSearch(options) {
     deps: [suspendedKey, ...deps],
     toOption: toOption != null ? toOption : insuranceToOption
   });
+  const isSuspendedRef = (0, import_react4.useRef)(isSuspended);
+  isSuspendedRef.current = isSuspended;
   const check = (0, import_react4.useCallback)(
-    (item) => isSuspended ? isSuspended(item) : isInsuranceSuspended(item, suspendedCodes),
+    (item) => {
+      const fn = isSuspendedRef.current;
+      return fn ? fn(item) : isInsuranceSuspended(item, suspendedCodes);
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isSuspended, suspendedKey]
+    [suspendedKey]
   );
   const mark = (0, import_react4.useCallback)(
     (option) => {
