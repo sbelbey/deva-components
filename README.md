@@ -244,6 +244,12 @@ npm install
 npm test           # vitest + Testing Library + jsdom
 npm run typecheck
 npm run build      # tsup → dist/ (ESM .mjs, CJS .cjs, .d.ts)
+npm run storybook  # catálogo en http://localhost:6006
+npm run build-storybook
 ```
+
+### Catálogo (Storybook)
+
+`stories/` tiene una página por componente o hook, con sus variantes; el selector **Modo** de la barra cambia entre claro y oscuro (`data-theme`, igual que las apps) y los colores salen de `deva-design`. Los datos de prueba son ficticios (`stories/_demo/mock-data.ts`). El catálogo no se publica: `files` del paquete sólo incluye `dist`, y Storybook, Vite y Tailwind son `devDependencies`.
 
 Para publicar una versión: subir `version` en `package.json`, `npm run build`, `npm test`, anotar en `CHANGELOG.md`, commitear `dist/`, crear el tag `vX.Y.Z` y pushear con `--tags`.

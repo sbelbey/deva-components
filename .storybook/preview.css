@@ -1,0 +1,16 @@
+@import 'tailwindcss';
+@import 'deva-design/tailwind.css';
+
+/* Los tokens cambian solos con data-theme="dark" (igual que en las apps). */
+html,
+body,
+#storybook-root {
+  background: var(--deva-bg);
+  color: var(--deva-ink);
+  font-family: var(--deva-font-body);
+}
+
+.docs-story,
+.sb-show-main {
+  background: var(--deva-bg);
+}

@@ -13,5 +13,5 @@
     "declaration": true,
     "types": ["vitest/globals"]
   },
-  "include": ["src", "test", "tsup.config.ts", "vitest.config.ts"]
+  "include": ["src", "test", "stories", ".storybook", "tsup.config.ts", "vitest.config.ts"]
 }

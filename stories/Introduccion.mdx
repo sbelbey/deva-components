@@ -1,0 +1,28 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Introducción" />
+
+# Catálogo de componentes DEVA
+
+Acá se ven y se prueban los componentes y hooks compartidos de la familia DEVA (DEVA, portal de pedidos, Nexus).
+
+## Cómo se usa
+
+- En el menú de la izquierda hay una página por componente, con sus variantes.
+- Arriba, el selector **Modo** cambia entre claro y oscuro, igual que las apps.
+- La pestaña **Accessibility** revisa contraste y etiquetas de cada variante.
+- Todos los datos son inventados.
+
+## Qué hay hoy
+
+Los hooks de búsqueda de `deva-components` (médico, estudio, diagnóstico, obra social, paciente, bioquímico y planilla). Son "el cerebro" de cada buscador y no tienen aspecto propio: acá se ven con una piel mínima de prueba.
+
+## Qué viene
+
+Los componentes visuales compartidos (botones, diálogos, logo, selector de modo…) se suman cuando termine el piloto. Decisión de tecnología: Tailwind 4 para toda la familia, DEVA migra de MUI por etapas (DEVA-232).
+
+## Cómo agregar una página
+
+1. Crear `stories/<grupo>/<Nombre>.stories.tsx`.
+2. Usar `title: 'Grupo/Nombre'` y una story por variante o estado.
+3. Datos de prueba en `stories/_demo/mock-data.ts`, siempre ficticios.
