@@ -1,17 +1,17 @@
 # Inventario de componentes de la familia DEVA
 
-Ticket: DEVA-230 (épica DEVA-229, versión DEVA-1.4.0). Relevado el 23/10/2026.
+Ticket: DEVA-230 (épica DEVA-229, versión DEVA-1.4.0). Relevado el 23/10/2026 y actualizado el 2/11/2026 (DEVA creció de 271 a 328 `.tsx` con la rama 1.3.13).
 
-Alcance: todos los `.tsx` de la UI de `deva` (renderer), `deva-ward-portal`, `nexus/frontend` y `deva-landing/deva-landing-web`. Detalle fila por fila en [inventario-componentes.csv](inventario-componentes.csv) (367 archivos); las columnas `decision` y `notas` quedan vacías para DEVA-231.
+Alcance: todos los `.tsx` de la UI de `deva` (renderer), `deva-ward-portal`, `nexus/frontend` y `deva-landing/deva-landing-web`. Detalle fila por fila en [inventario-componentes.csv](inventario-componentes.csv) (431 archivos); las columnas `decision` y `notas` quedan vacías para DEVA-231.
 
 ## 1. Stack de cada proyecto
 
 | Proyecto | `.tsx` | React | Estilos | Notas |
 |---|---|---|---|---|
-| deva (renderer) | 271 | 18 | **MUI 6** (193 archivos), 3 mezclan MUI y Tailwind | Electron; contextos y servicios propios |
+| deva (renderer) | 328 | 18 | **MUI 6** (219 archivos), 3 mezclan MUI y Tailwind | Electron; contextos y servicios propios |
 | deva-ward-portal | 30 | 19 | **Tailwind 4**, componentes de UI escritos a mano | Vite 8, TS 6, vitest |
-| nexus (frontend) | 54 | 19 | **Tailwind 4** + Radix + `class-variance-authority` + `clsx` + `tailwind-merge` (estilo shadcn) | Vite 8, TS 6 |
-| deva-landing | 12 | 19 (Next 16) | Tailwind 4 | Sólo pantallas y animaciones propias |
+| nexus (frontend) | 59 | 19 | **Tailwind 4** + Radix + `class-variance-authority` + `clsx` + `tailwind-merge` (estilo shadcn) | Vite 8, TS 6 |
+| deva-landing | 14 | 19 (Next 16) | Tailwind 4 | Sólo pantallas y animaciones propias |
 
 Los cuatro ya usan `deva-design` v1.1.0 (tokens). `deva` y el portal también usan `deva-components` v1.0.2 (hooks de búsqueda sin estilo).
 
@@ -23,10 +23,10 @@ La clasificación es automática por ruta y sirve sólo como orientación. En `d
 
 | Proyecto | Componentes | Pantallas y subpantallas | Contextos/providers | Tests | Entrada |
 |---|---|---|---|---|---|
-| deva | 105 | 110 | (en `context/`, no separados) | 54 | 2 |
+| deva | 122 | 119 | (en `context/`, no separados) | 85 | 2 |
 | deva-ward-portal | 18 | 6 | 2 | 2 | 2 |
-| nexus | 21 | 26 | 5 | 0 | 2 |
-| deva-landing | 0 | 12 | 0 | 0 | 0 |
+| nexus | 22 | 30 | 5 | 0 | 2 |
+| deva-landing | 0 | 14 | 0 | 0 | 0 |
 
 ### deva-ward-portal (`src/components`)
 `ui/` hecho a mano: `Autocomplete`, `ColorModeSwitch`, `ConfirmDialog`, `Tip`, y `ui/index.tsx` (156 líneas, 8 usos: botones, campos y similares). `search/`: `SearchField` más cuatro autocompletes (diagnóstico, médico, obra social, estudio) sobre los hooks de `deva-components`. Propios del portal: `PatientEntryForm` (489 líneas), `RoundDetail` (444), `RoundsTray`, `BrandLockup`, `UsageTracker`.
@@ -47,7 +47,7 @@ Lo más usado y chico: `FormTitle` (20 líneas, 16 usos), `SettingsCard` (6), `P
 | Autocompletes de diagnóstico, médico, obra social, estudio | deva, portal | Los dos usan los hooks de `deva-components`; sólo cambia la capa visual (MUI vs Tailwind) |
 | `AppShell`, `AuthShell`/`Login`, `AuthProvider`, `router` | portal, nexus | Estructura equivalente, código separado |
 | Kit de UI básico (botón, input, select, diálogo, tooltip, tabla) | portal (a mano), nexus (shadcn), deva (MUI) | Tres kits para lo mismo |
-| `ConfirmDialog` | portal; en Nexus se arma con `dialog` | Comportamiento equivalente |
+| `ConfirmDialog` | portal; Nexus usa `ui/dialog` directo | Mismo propósito, distinta capa |
 | `PasswordField` / `password-input` | deva (derivaciones), nexus | Mismo propósito |
 
 ## 4. Candidatos preliminares (para decidir en DEVA-231)
@@ -60,12 +60,12 @@ No es una decisión; sólo ordena la discusión.
 
 **C. Propios de cada proyecto:** pantallas de dominio (planillas, órdenes, facturación, estadísticas, licencias, costos, uso), todo lo que toca Electron, `PatientEntryForm`/`RoundDetail` (reglas del piso).
 
-**D. Piloto sugerido (DEVA-234), chicos y de poco uso:** `BrandLockup` (2 y 3 usos, ya casi idéntico), `ColorModeSwitch` (2 usos), `Tip` (2), `LicenseStatusBadge`/`LicenseExpiryBadge` (15 líneas cada uno), `PasswordField`.
+**D. Piloto sugerido (DEVA-234), chicos y de poco uso:** `BrandLockup` (2 y 3 usos, ya casi idéntico), `ColorModeSwitch` (2 usos), `Tip` (2), `PasswordField` (deva) / `password-input` (nexus), 3 usos. Los badges de licencia (15 líneas) se descartaron: son de dominio de Nexus y sólo los usa ese proyecto.
 
 ## 5. Preguntas abiertas para la decisión de tecnología (DEVA-232)
 
 1. ¿DEVA sube a React 19 o los componentes compartidos soportan 18 y 19? `deva-components` hoy pide React ≥18.
-2. ¿MUI se mantiene en DEVA (193 archivos) y se comparten sólo hooks y tokens con él, o se migra de a poco?
+2. ¿MUI se mantiene en DEVA (219 archivos) y se comparten sólo hooks y tokens con él, o se migra de a poco?
 3. ¿Kit común de portal y Nexus: copiar el estilo shadcn de Nexus (Radix + cva) o hacer uno nuevo?
 4. ¿Cómo se distribuye? Hoy es `github:sbelbey/deva-components#vX` con `dist/` commiteado.
 
