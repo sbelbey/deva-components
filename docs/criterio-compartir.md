@@ -65,5 +65,5 @@ Candidatos que cumplen la regla 1 (dos proyectos) y son chicos: `BrandLockup`, `
 
 ## 7. Qué no resuelve este criterio
 
-- Si DEVA comparte la capa 3 (MUI vs Tailwind, React 18 vs 19): lo define DEVA-232. Hasta entonces, las filas de DEVA con `compartir-visual` o `unificar` quedan "a confirmar".
+- DEVA-232 decidió (2/11): Tailwind 4 para todos, DEVA migra de MUI por etapas ([decision-tecnologia.md](decision-tecnologia.md)). Las filas de DEVA con `compartir-visual` o `unificar` se confirman en cada etapa de la migración.
 - La clasificación se hizo por ruta, nombre y acoplamiento, con reglas explícitas; no se leyó cada archivo. Los candidatos `compartir-*` y `unificar` se contrastaron entre proyectos (diferencias de BrandLockup, ColorModeSwitch y proveedores de modo medidas; el resto por nombre y función); los `propio` son el valor por defecto. Hay que revisarlos en la reunión de decisión.
