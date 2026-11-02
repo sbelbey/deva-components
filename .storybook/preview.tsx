@@ -31,7 +31,7 @@ const preview: Preview = {
   parameters: {
     layout: 'padded',
     controls: { expanded: true },
-    options: { storySort: { order: ['Introducción', 'Componentes', 'Búsqueda'] } },
+    options: { storySort: { order: ['Introducción', 'Primitivos', 'Componentes', 'Búsqueda'] } },
   },
 };
 

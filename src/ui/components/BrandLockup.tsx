@@ -1,8 +1,8 @@
-import { cx } from './cx';
+import { cx } from '../primitives/cx';
 
 export interface BrandLockupProps {
-  /** Nombre del producto que va después del logo ("Pedidos", "Nexus"…). */
-  product: string;
+  /** Nombre del producto que va después del logo ("Pedidos", "Nexus"…). Sin nombre, queda sólo el logo (DEVA de escritorio). */
+  product?: string;
   /** 'white' sobre la barra o fondos de color, 'blue' sobre fondos claros. */
   tone: 'white' | 'blue';
   /** Las dos versiones del logo oficial (se importan de `deva-design/assets`). */
@@ -34,8 +34,8 @@ export function BrandLockup({
       className={cx('inline-flex shrink-0', stacked ? 'flex-col items-end gap-3' : 'items-center gap-3', className)}
     >
       <img src={tone === 'white' ? logos.white : logos.blue} alt="DEVA" className={logoClassName} />
-      {!stacked && <span aria-hidden className="h-6 w-px bg-current opacity-55" />}
-      <span className={cx('leading-none font-semibold tracking-[-0.01em]', textClassName)}>{product}</span>
+      {product && !stacked && <span aria-hidden className="h-6 w-px bg-current opacity-55" />}
+      {product && <span className={cx('leading-none font-semibold tracking-[-0.01em]', textClassName)}>{product}</span>}
     </span>
   );
 }

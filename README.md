@@ -239,7 +239,7 @@ export function DoctorAutocomplete({ value, onChange }: { value: string | null; 
 
 ## Componentes visuales (`deva-components/ui`)
 
-Además de los hooks, el paquete trae un subpath `deva-components/ui` con componentes visuales chicos que se usan igual en todas las apps: `BrandLockup`, `ColorModeSwitch`, `Tip` y `PasswordInput`. Importarlo es opcional: quien sólo usa los hooks no carga nada de esto.
+Además de los hooks, el paquete trae un subpath `deva-components/ui` con componentes visuales chicos que se usan igual en todas las apps: primitivos (`Alert`, `Button`, `ColorModeSwitch`, `PasswordInput`, `Spinner`, `TextField`, `Tip`) y componentes armados con ellos (`BrandLockup`, `PasswordField`, la plantilla de login `AuthLayout` + `LoginForm`). Importarlo es opcional: quien sólo usa los hooks no carga nada de esto.
 
 ```tsx
 import { ColorModeSwitch, PasswordInput } from 'deva-components/ui';

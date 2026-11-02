@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ColorModeSwitch, type ColorMode } from '../../src/ui';
 
 const meta = {
-  title: 'Componentes/ColorModeSwitch',
+  title: 'Primitivos/ColorModeSwitch',
   component: ColorModeSwitch,
   args: { mode: 'light', onChange: () => {} },
   argTypes: { mode: { control: 'inline-radio', options: ['light', 'dark'] } },

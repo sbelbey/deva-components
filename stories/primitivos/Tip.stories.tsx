@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Tip } from '../../src/ui';
 
 const meta = {
-  title: 'Componentes/Tip',
+  title: 'Primitivos/Tip',
   component: Tip,
   args: { content: 'Glóbulos blancos por microlitro de sangre.', children: 'Leucocitos' },
   decorators: [

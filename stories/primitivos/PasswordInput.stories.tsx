@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PasswordInput } from '../../src/ui';
 
 const meta = {
-  title: 'Componentes/PasswordInput',
+  title: 'Primitivos/PasswordInput',
   component: PasswordInput,
   args: { placeholder: 'Contraseña', 'aria-label': 'Contraseña' },
   decorators: [
