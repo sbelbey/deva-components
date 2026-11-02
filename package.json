@@ -18,6 +18,16 @@
         "default": "./dist/index.cjs"
       }
     },
+    "./ui": {
+      "import": {
+        "types": "./dist/ui.d.ts",
+        "default": "./dist/ui.mjs"
+      },
+      "require": {
+        "types": "./dist/ui.d.cts",
+        "default": "./dist/ui.cjs"
+      }
+    },
     "./package.json": "./package.json"
   },
   "files": [
@@ -30,7 +40,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build -o storybook-static"
+    "build-storybook": "storybook build -o storybook-static",
+    "test:react19": "npm i --prefix .react19 --no-package-lock --silent react@^19 react-dom@^19 @testing-library/react@^16 @testing-library/dom@^10 && vitest run -c vitest.react19.config.ts"
   },
   "peerDependencies": {
     "react": ">=18"
@@ -58,5 +69,12 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "typesVersions": {
+    "*": {
+      "ui": [
+        "./dist/ui.d.ts"
+      ]
+    }
   }
 }

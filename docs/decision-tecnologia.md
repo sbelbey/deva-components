@@ -29,7 +29,9 @@ Ticket: DEVA-232 (épica DEVA-229, versión DEVA-1.4.0). Decidido por Saúl el 2
 
 ## Plan por etapas
 
-0. **1.4.0:** Tailwind 4 conviviendo con MUI en DEVA (sin cambiar pantallas), Storybook, piloto de 3 o 4 componentes chicos compartidos, y plan detallado de migración.
+Orden ajustado por Saúl el 2/11/2026: **primero se construyen los componentes y se prueban en el catálogo; después se implementan en DEVA.** No se hace antes una prueba de convivencia Tailwind + MUI en DEVA.
+
+0. **1.4.0:** Storybook (DEVA-233, hecho), piloto de 4 componentes chicos construidos y probados en el catálogo con React 18 y 19 (DEVA-234), después sumar Tailwind al build de DEVA e implementarlos ahí (DEVA-392), y plan detallado de migración (DEVA-393).
 1. **Versiones siguientes:** pantallas por tandas, de menor a mayor criticidad (primero las menos usadas; las de carga de resultados y órdenes al final), reemplazando íconos y botones por los del kit común.
 2. **Al final:** grillas (`DataGrid`) y selectores de fecha, y recién ahí se quita MUI. React 19 se evalúa cuando sea necesario.
 

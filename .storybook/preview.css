@@ -1,6 +1,10 @@
 @import 'tailwindcss';
 @import 'deva-design/tailwind.css';
 
+/* Clases de los componentes del paquete y de las páginas del catálogo. */
+@source '../src/ui';
+@source '../stories';
+
 /* Los tokens cambian solos con data-theme="dark" (igual que en las apps). */
 html,
 body,

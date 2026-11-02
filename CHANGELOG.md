@@ -4,6 +4,7 @@
 
 ### Agregado
 - Catálogo de componentes con Storybook 10 (`npm run storybook`): una página por hook de búsqueda (médico, estudio, diagnóstico, obra social, paciente con escaneo de DNI, bioquímico, planilla), modo claro/oscuro y revisión de accesibilidad. Estilos con Tailwind 4 y los tokens de `deva-design`. No cambia el paquete publicado (DEVA-233).
+- Subpath `deva-components/ui` con los primeros componentes visuales compartidos: `BrandLockup`, `ColorModeSwitch`, `Tip` y `PasswordInput`. Tailwind 4 y tokens de `deva-design`, sin MUI ni íconos externos, React 18 y 19 (DEVA-234). Tests con las dos versiones (`npm run test:react19`) y una página por componente en el catálogo.
 - Documentos de la épica DEVA-229 en `docs/`: inventario, criterio de qué se comparte y decisión de tecnología.
 
 ## [1.0.2] - 2026-10-08

@@ -237,6 +237,26 @@ export function DoctorAutocomplete({ value, onChange }: { value: string | null; 
 }
 ```
 
+## Componentes visuales (`deva-components/ui`)
+
+Además de los hooks, el paquete trae un subpath `deva-components/ui` con componentes visuales chicos que se usan igual en todas las apps: `BrandLockup`, `ColorModeSwitch`, `Tip` y `PasswordInput`. Importarlo es opcional: quien sólo usa los hooks no carga nada de esto.
+
+```tsx
+import { ColorModeSwitch, PasswordInput } from 'deva-components/ui';
+```
+
+Están hechos con **Tailwind 4** y los tokens de `deva-design`, sin MUI, sin librería de íconos y sin servicios de ninguna app: lo propio de cada app (guardar el modo en la cuenta, el logo, el texto) entra por props. Funcionan con React 18 y 19 (los tests corren con los dos: `npm test` y `npm run test:react19`).
+
+La app que los use necesita Tailwind 4, los tokens y que Tailwind lea las clases del paquete (esta configuración se probó sólo en el catálogo; se confirma al implementarlos en cada app):
+
+```css
+@import 'tailwindcss';
+@import 'deva-design/tailwind.css';
+@source '../node_modules/deva-components/dist';
+```
+
+Todos se ven en el catálogo (sección **Componentes**), con sus variantes y en modo claro y oscuro. `className` es para layout (margen, ancho), no para pisar estilos del componente.
+
 ## Desarrollo
 
 ```bash
