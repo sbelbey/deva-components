@@ -19,8 +19,8 @@ Los hooks de búsqueda de `deva-components` (médico, estudio, diagnóstico, obr
 
 **Primitivos** y **Componentes** visuales compartidos, hechos con Tailwind 4 y los tokens de `deva-design`, y probados con React 18 y 19:
 
-- **Primitivos** (piezas chicas, sin conocer ninguna pantalla): `Alert`, `Button`, `ColorModeSwitch`, `PasswordInput`, `Spinner`, `TextField` y `Tip`.
-- **Componentes** (se arman con primitivos y resuelven una pieza de pantalla): `BrandLockup`, `PasswordField` y la **plantilla de login** (`AuthLayout` + `LoginForm`), que usan DEVA, el portal de pedidos y Nexus.
+- **Primitivos** (piezas chicas, sin conocer ninguna pantalla): `Alert`, `Button`, `ColorModeSwitch`, `FileDropzone`, `PasswordInput`, `SearchField`, `SegmentedControl`, `Spinner`, `StatusDot`, `TextField` y `Tip`.
+- **Componentes** (se arman con primitivos y resuelven una pieza de pantalla): `BrandLockup`, `PasswordField` la **plantilla de login** (`AuthLayout` + `LoginForm`) y la **plantilla de lista** (`ListPage` + `FilterToolbar` + `DataTable`), pensadas para las tres apps.
 
 Regla: un componente se arma sólo con primitivos y tokens, nunca con estilos propios sueltos; si falta una pieza chica, primero se crea como primitivo.
 

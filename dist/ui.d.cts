@@ -43,6 +43,77 @@ declare function EyeIcon({ off, ...props }: IconProps & {
 }): react.JSX.Element;
 declare function UserIcon(props: IconProps): react.JSX.Element;
 declare function LockIcon(props: IconProps): react.JSX.Element;
+declare function SearchIcon(props: IconProps): react.JSX.Element;
+declare function CloseIcon(props: IconProps): react.JSX.Element;
+declare function ChevronRightIcon(props: IconProps): react.JSX.Element;
+declare function ChevronDownIcon(props: IconProps): react.JSX.Element;
+declare function FilterIcon(props: IconProps): react.JSX.Element;
+declare function UploadIcon(props: IconProps): react.JSX.Element;
+declare function WarnIcon(props: IconProps): react.JSX.Element;
+
+interface FileDropzoneProps {
+    /** Nombre para lectores de pantalla (el del input de archivo). */
+    label: string;
+    /** Tipo MIME aceptado, por ejemplo `application/pdf`. */
+    accept: string;
+    /** Extensión aceptada si el sistema no informa el tipo, por ejemplo `.pdf`. */
+    extension?: string;
+    /** Se llama con el archivo elegido o soltado. */
+    onFile: (file: File) => void;
+    /** Se llama si lo soltado no es del tipo aceptado. */
+    onReject?: (message: string) => void;
+    rejectMessage?: string;
+    /** Leyendo el archivo: se ve el progreso y no se acepta otro. */
+    busy?: boolean;
+    title?: string;
+    hint?: ReactNode;
+    busyTitle?: string;
+    className?: string;
+}
+/**
+ * Zona para elegir o arrastrar un archivo. Toda la zona es un botón (clic,
+ * Enter o Espacio abren el selector del sistema) y también acepta que se
+ * suelte el archivo encima.
+ */
+declare function FileDropzone({ label, accept, extension, onFile, onReject, rejectMessage, busy, title, hint, busyTitle, className, }: FileDropzoneProps): react.JSX.Element;
+
+interface SearchFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'value' | 'onChange'> {
+    value: string;
+    onChange: (value: string) => void;
+    /** Nombre para lectores de pantalla ("Buscar paciente"). */
+    label: string;
+    clearLabel?: string;
+    /** Clases del contenedor (ancho, margen). */
+    wrapperClassName?: string;
+}
+/** Buscador de las pantallas de lista: lupa, sin etiqueta flotante y con «borrar» cuando hay texto. */
+declare const SearchField: react.ForwardRefExoticComponent<SearchFieldProps & react.RefAttributes<HTMLInputElement>>;
+
+interface SegmentedOption<T extends string> {
+    value: T;
+    label: string;
+}
+interface SegmentedControlProps<T extends string> {
+    /** Nombre del grupo para lectores de pantalla ("Estado"). */
+    label: string;
+    value: T;
+    options: readonly SegmentedOption<T>[];
+    onChange: (value: T) => void;
+    className?: string;
+}
+/**
+ * Una opción entre pocas, siempre a la vista (en vez de un desplegable). La
+ * elegida se levanta sobre el fondo; las demás quedan en gris.
+ */
+declare function SegmentedControl<T extends string>({ label, value, options, onChange, className, }: SegmentedControlProps<T>): react.JSX.Element;
+
+interface StatusDotProps {
+    tone?: 'ok' | 'warn' | 'danger' | 'muted';
+    children: ReactNode;
+    className?: string;
+}
+/** Estado en una palabra con un punto de color. El color acompaña al texto, nunca lo reemplaza. */
+declare function StatusDot({ tone, children, className }: StatusDotProps): react.JSX.Element;
 
 interface PasswordInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
     /** Clases del contenedor (ancho, margen). */
@@ -148,6 +219,71 @@ interface BrandLockupProps {
  */
 declare function BrandLockup({ product, tone, logos, stacked, className, logoClassName, textClassName, }: BrandLockupProps): react.JSX.Element;
 
+interface DataTableColumn<T> {
+    key: string;
+    header: ReactNode;
+    /** Qué se dibuja en la celda de cada fila. Las celdas de dos líneas son `<Cell primary secondary />`. */
+    cell: (row: T) => ReactNode;
+    /** Ancho de la columna (clase de Tailwind, por ejemplo `w-48`). */
+    className?: string;
+}
+interface DataTableProps<T> {
+    columns: readonly DataTableColumn<T>[];
+    rows: readonly T[];
+    rowKey: (row: T) => string;
+    /** Si está, la fila es navegable con mouse y con Enter, y muestra la flecha al final. */
+    onRowClick?: (row: T) => void;
+    /** Qué se ve si no hay filas (mensaje y, si hace falta, «Limpiar filtros»). */
+    empty?: ReactNode;
+    /** Mientras carga se ve una línea fina arriba, sin mover la tabla. */
+    loading?: boolean;
+    /** Pie de la tabla (paginado). */
+    footer?: ReactNode;
+    /** Nombre de la tabla para lectores de pantalla. */
+    label: string;
+}
+/** Celda de dos líneas: lo principal en negrita y el detalle debajo. */
+declare function Cell({ primary, secondary }: {
+    primary: ReactNode;
+    secondary?: ReactNode;
+}): react.JSX.Element;
+/** Tabla sobre una sola superficie con un borde fino: sin sombra ni cajas anidadas. */
+declare function DataTable<T>({ columns, rows, rowKey, onRowClick, empty, loading, footer, label, }: DataTableProps<T>): react.JSX.Element;
+
+interface FilterToolbarProps {
+    /** El `SearchField` de la pantalla. */
+    search: ReactNode;
+    /** La opción principal, siempre a la vista (`SegmentedControl`). */
+    primaryFilter?: ReactNode;
+    /** Filtros secundarios: quedan plegados detrás del botón «Filtros». */
+    moreFilters?: ReactNode;
+    /** Cuántos de los filtros plegados están en uso (se ve en el botón). */
+    activeMoreFilters?: number;
+    onClearMoreFilters?: () => void;
+    filtersLabel?: string;
+    clearLabel?: string;
+}
+/**
+ * Barra de arriba de una lista: buscador, la opción principal a la vista y,
+ * plegados, el resto de los filtros. Los plegados avisan con un número cuántos
+ * están en uso, para que no haya un filtro activo que no se vea.
+ */
+declare function FilterToolbar({ search, primaryFilter, moreFilters, activeMoreFilters, onClearMoreFilters, filtersLabel, clearLabel, }: FilterToolbarProps): react.JSX.Element;
+
+interface ListPageProps {
+    title: string;
+    subtitle?: string;
+    /** Acciones principales de la pantalla (arriba a la derecha). */
+    actions?: ReactNode;
+    children: ReactNode;
+}
+/**
+ * Marco de las pantallas de lista: sin banner ni caja alrededor. El título va
+ * sobre el fondo de la página, ocupa todo el ancho disponible y el contenido
+ * se apoya en superficies propias (`FilterToolbar`, `DataTable`).
+ */
+declare function ListPage({ title, subtitle, actions, children }: ListPageProps): react.JSX.Element;
+
 interface LoginCredentials {
     username: string;
     password: string;
@@ -192,4 +328,4 @@ interface PasswordFieldProps extends Omit<TextFieldProps, 'type' | 'endAdornment
  */
 declare const PasswordField: react.ForwardRefExoticComponent<PasswordFieldProps & react.RefAttributes<HTMLInputElement>>;
 
-export { Alert, type AlertProps, AuthLayout, type AuthLayoutProps, BrandLockup, type BrandLockupProps, Button, type ButtonProps, type ColorMode, ColorModeSwitch, type ColorModeSwitchProps, EyeIcon, LockIcon, type LoginCredentials, LoginForm, type LoginFormProps, PasswordField, type PasswordFieldProps, PasswordInput, type PasswordInputProps, Spinner, type SpinnerProps, TextField, type TextFieldProps, Tip, type TipProps, UserIcon };
+export { Alert, type AlertProps, AuthLayout, type AuthLayoutProps, BrandLockup, type BrandLockupProps, Button, type ButtonProps, Cell, ChevronDownIcon, ChevronRightIcon, CloseIcon, type ColorMode, ColorModeSwitch, type ColorModeSwitchProps, DataTable, type DataTableColumn, type DataTableProps, EyeIcon, FileDropzone, type FileDropzoneProps, FilterIcon, FilterToolbar, type FilterToolbarProps, ListPage, type ListPageProps, LockIcon, type LoginCredentials, LoginForm, type LoginFormProps, PasswordField, type PasswordFieldProps, PasswordInput, type PasswordInputProps, SearchField, type SearchFieldProps, SearchIcon, SegmentedControl, type SegmentedControlProps, type SegmentedOption, Spinner, type SpinnerProps, StatusDot, type StatusDotProps, TextField, type TextFieldProps, Tip, type TipProps, UploadIcon, UserIcon, WarnIcon };
