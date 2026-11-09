@@ -49,3 +49,29 @@ export { LoginForm } from './components/LoginForm';
 export type { LoginCredentials, LoginFormProps } from './components/LoginForm';
 export { PasswordField } from './components/PasswordField';
 export type { PasswordFieldProps } from './components/PasswordField';
+
+// Autocompletes: uno por tipo de dato, con el mismo comportamiento que en DEVA.
+export { Combobox } from './autocomplete/Combobox';
+export type { ComboboxFieldProps, ComboboxProps, ComboboxSearch } from './autocomplete/Combobox';
+export { useComboboxText } from './autocomplete/useComboboxText';
+export type { InputChangeReason } from './autocomplete/useComboboxText';
+export { BiochemistAutocomplete } from './autocomplete/BiochemistAutocomplete';
+export type { BiochemistAutocompleteProps } from './autocomplete/BiochemistAutocomplete';
+export { DiagnosisAutocomplete } from './autocomplete/DiagnosisAutocomplete';
+export type { DiagnosisAutocompleteProps } from './autocomplete/DiagnosisAutocomplete';
+export { DoctorAutocomplete } from './autocomplete/DoctorAutocomplete';
+export type { DoctorAutocompleteProps } from './autocomplete/DoctorAutocomplete';
+export { InsuranceAutocomplete } from './autocomplete/InsuranceAutocomplete';
+export type { InsuranceAutocompleteProps } from './autocomplete/InsuranceAutocomplete';
+export { PatientDniAutocomplete } from './autocomplete/PatientDniAutocomplete';
+export type { PatientDniAutocompleteProps } from './autocomplete/PatientDniAutocomplete';
+export { StudyAutocomplete } from './autocomplete/StudyAutocomplete';
+export type { StudyAutocompleteProps, StudyEnterTools } from './autocomplete/StudyAutocomplete';
+export { WorksheetAutocomplete } from './autocomplete/WorksheetAutocomplete';
+export type { WorksheetAutocompleteProps, WorksheetEnterTools } from './autocomplete/WorksheetAutocomplete';
+
+// Fecha: campo por partes + calendario, como el de DEVA.
+export { DatePicker } from './datepicker/DatePicker';
+export type { DatePickerProps } from './datepicker/DatePicker';
+export { Calendar } from './datepicker/Calendar';
+export type { CalendarProps } from './datepicker/Calendar';

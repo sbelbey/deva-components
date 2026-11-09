@@ -25,6 +25,8 @@ __export(src_exports, {
   biochemistSearchText: () => biochemistSearchText,
   biochemistToOption: () => biochemistToOption,
   buildHaystack: () => buildHaystack,
+  createExactCodeKeyDown: () => createExactCodeKeyDown,
+  defaultNormalizeCode: () => defaultNormalizeCode,
   diagnosisLabel: () => diagnosisLabel,
   diagnosisSearchText: () => diagnosisSearchText,
   diagnosisToOption: () => diagnosisToOption,
@@ -35,6 +37,7 @@ __export(src_exports, {
   doctorToOption: () => doctorToOption,
   entityId: () => entityId,
   findDiagnosisByCode: () => findDiagnosisByCode,
+  findExactCodeMatch: () => findExactCodeMatch,
   findProfileByShortcut: () => findProfileByShortcut,
   findStudyByExactCode: () => findStudyByExactCode,
   findWorksheetByCode: () => findWorksheetByCode,
@@ -331,6 +334,56 @@ function useSearch(config) {
   const answered = remote ? answeredQuery === query : true;
   const empty = qualifies && answered && !loading && !error && options.length === 0;
   return { inputValue, setInputValue, reset, options, loading, error, empty, getOptionById };
+}
+
+// src/core/exactCode.ts
+function defaultNormalizeCode(code) {
+  const text = code.trim().toLowerCase();
+  return /^\d+$/.test(text) ? String(Number(text)) : text;
+}
+function findExactCodeMatch(items, rawText, options) {
+  var _a, _b, _c;
+  if (!items || !rawText || !rawText.trim()) return void 0;
+  const normalize = (_a = options.normalize) != null ? _a : defaultNormalizeCode;
+  const getId = (_b = options.getId) != null ? _b : ((item) => entityId(item));
+  const wanted = normalize(rawText);
+  if (!wanted) return void 0;
+  const literal = rawText.trim().toLowerCase();
+  const uniqueBy = (matches) => {
+    let found;
+    let foundId;
+    for (const item of items) {
+      const code = options.getCode(item);
+      if (code === null || code === void 0 || code === "") continue;
+      if (!matches(String(code))) continue;
+      const id = getId(item);
+      if (found === void 0) {
+        found = item;
+        foundId = id;
+      } else if (id !== foundId) {
+        return void 0;
+      }
+    }
+    return found;
+  };
+  return (_c = uniqueBy((code) => code.trim().toLowerCase() === literal)) != null ? _c : uniqueBy((code) => normalize(code) === wanted);
+}
+
+// src/core/exactCodeKeyDown.ts
+function createExactCodeKeyDown(args) {
+  return (event) => {
+    var _a, _b, _c;
+    const isEnter = event.key === "Enter";
+    const isTab = event.key === "Tab" && !event.shiftKey;
+    if (!isEnter && !isTab) return;
+    if ((_a = event.nativeEvent) == null ? void 0 : _a.isComposing) return;
+    const input = event.target;
+    if ((_b = input.getAttribute) == null ? void 0 : _b.call(input, "aria-activedescendant")) return;
+    const match = args.findMatch((_c = input.value) != null ? _c : "");
+    if (match === void 0) return;
+    args.onSelect(match);
+    if (isEnter) event.preventDefault();
+  };
 }
 
 // src/core/useLocalSearch.ts
@@ -861,6 +914,8 @@ function useWorksheetSearch(options) {
   biochemistSearchText,
   biochemistToOption,
   buildHaystack,
+  createExactCodeKeyDown,
+  defaultNormalizeCode,
   diagnosisLabel,
   diagnosisSearchText,
   diagnosisToOption,
@@ -871,6 +926,7 @@ function useWorksheetSearch(options) {
   doctorToOption,
   entityId,
   findDiagnosisByCode,
+  findExactCodeMatch,
   findProfileByShortcut,
   findStudyByExactCode,
   findWorksheetByCode,

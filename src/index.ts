@@ -18,6 +18,9 @@ export type {
 } from './core/types';
 export { useSearch } from './core/useSearch';
 export type { SearchConfig } from './core/useSearch';
+export { defaultNormalizeCode, findExactCodeMatch } from './core/exactCode';
+export type { ExactCodeMatchOptions } from './core/exactCode';
+export { createExactCodeKeyDown } from './core/exactCodeKeyDown';
 export { useLocalSearch } from './core/useLocalSearch';
 export { useRemoteSearch } from './core/useRemoteSearch';
 export type { EntitySearchOptions } from './core/entity';
