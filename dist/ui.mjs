@@ -27573,7 +27573,7 @@ var require_react_dom_development = __commonJS({
           return root2;
         }
         var ReactVersion = "18.3.1";
-        function createPortal3(children, containerInfo, implementation) {
+        function createPortal4(children, containerInfo, implementation) {
           var key = arguments.length > 3 && arguments[3] !== void 0 ? arguments[3] : null;
           {
             checkKeyStringCoercion(key);
@@ -28430,7 +28430,7 @@ var require_react_dom_development = __commonJS({
           if (!isValidContainer(container)) {
             throw new Error("Target container is not a DOM element.");
           }
-          return createPortal3(children, container, null, key);
+          return createPortal4(children, container, null, key);
         }
         function renderSubtreeIntoContainer(parentComponent, element, containerNode, callback) {
           return unstable_renderSubtreeIntoContainer(parentComponent, element, containerNode, callback);
@@ -28864,7 +28864,9 @@ function SegmentedControl({
           {
             type: "button",
             "aria-pressed": selected,
-            onClick: () => onChange(option.value),
+            onClick: () => {
+              if (!selected) onChange(option.value);
+            },
             className: cx(
               "rounded-lg px-3 py-1.5 text-sm transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-deva-action",
               selected ? "bg-deva-surface font-semibold text-deva-ink shadow-deva-sm" : "font-medium text-deva-ink-soft hover:text-deva-ink"
@@ -29243,7 +29245,7 @@ function ListPage({ title, subtitle, actions, children }) {
 }
 
 // src/ui/components/LoginForm.tsx
-import { useState as useState6 } from "react";
+import { useRef as useRef2, useState as useState6 } from "react";
 
 // src/ui/components/PasswordField.tsx
 import { forwardRef as forwardRef5, useState as useState5 } from "react";
@@ -29321,17 +29323,21 @@ function LoginForm({
   const [password, setPassword] = useState6("");
   const [submitting, setSubmitting] = useState6(false);
   const [localError, setLocalError] = useState6(null);
+  const inFlight = useRef2(false);
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (inFlight.current || loading) return;
     if (!username.trim() || !password) {
       setLocalError(requiredMessage);
       return;
     }
     setLocalError(null);
+    inFlight.current = true;
     setSubmitting(true);
     try {
       await onSubmit({ username: username.trim(), password });
     } finally {
+      inFlight.current = false;
       setSubmitting(false);
     }
   };
@@ -29375,7 +29381,7 @@ import {
   useCallback,
   useEffect,
   useId as useId4,
-  useRef as useRef2,
+  useRef as useRef3,
   useState as useState8
 } from "react";
 
@@ -29441,10 +29447,10 @@ function Combobox({
   const baseId = id != null ? id : autoId;
   const listId = `${baseId}-listbox`;
   const optionId = (index) => `${baseId}-option-${index}`;
-  const innerRef = useRef2(null);
-  const anchorRef = useRef2(null);
-  const listRef = useRef2(null);
-  const firstFocus = useRef2(true);
+  const innerRef = useRef3(null);
+  const anchorRef = useRef3(null);
+  const listRef = useRef3(null);
+  const firstFocus = useRef3(true);
   const setRefs = useCallback(
     (node) => {
       innerRef.current = node;
@@ -29465,12 +29471,12 @@ function Combobox({
   );
   const selectedText = selected ? inputLabel(selected) : freeSolo && showUnknownValue && valueId ? valueId : "";
   const highlightedIndex = highlightedKey === null ? -1 : options.findIndex((option) => optionKey(option) === highlightedKey);
-  const textRef = useRef2(text);
+  const textRef = useRef3(text);
   textRef.current = text;
-  const onInputChangeRef = useRef2(onInputChange);
+  const onInputChangeRef = useRef3(onInputChange);
   onInputChangeRef.current = onInputChange;
   const valueKey = `${selected ? optionKey(selected) : ""}|${valueId != null ? valueId : ""}`;
-  const previousValueKey = useRef2(void 0);
+  const previousValueKey = useRef3(void 0);
   useEffect(() => {
     const changed = valueKey !== previousValueKey.current;
     previousValueKey.current = valueKey;
@@ -29740,14 +29746,14 @@ function Combobox({
 }
 
 // src/ui/autocomplete/useComboboxText.ts
-import { useCallback as useCallback2, useEffect as useEffect2, useRef as useRef3, useState as useState9 } from "react";
+import { useCallback as useCallback2, useEffect as useEffect2, useRef as useRef4, useState as useState9 } from "react";
 function useComboboxText(options) {
   const freeText = options == null ? void 0 : options.freeText;
   const [text, setTextState] = useState9(freeText != null ? freeText : "");
   const [filterText, setFilterText] = useState9("");
-  const onFreeRef = useRef3(options == null ? void 0 : options.onFreeTextChange);
+  const onFreeRef = useRef4(options == null ? void 0 : options.onFreeTextChange);
   onFreeRef.current = options == null ? void 0 : options.onFreeTextChange;
-  const emittedRef = useRef3(freeText);
+  const emittedRef = useRef4(freeText);
   useEffect2(() => {
     if (freeText === void 0) return;
     if (freeText === emittedRef.current) return;
@@ -29944,7 +29950,7 @@ function InsuranceAutocomplete(props) {
 }
 
 // src/ui/autocomplete/PatientDniAutocomplete.tsx
-import { useEffect as useEffect3, useRef as useRef4, useState as useState10 } from "react";
+import { useEffect as useEffect3, useRef as useRef5, useState as useState10 } from "react";
 import { jsx as jsx25 } from "react/jsx-runtime";
 var DNI_SCAN_ERROR_TEXT = "No se pudo leer el DNI escaneado";
 var PATIENT_LOADING_TEXT = "Cargando pacientes\u2026";
@@ -29959,7 +29965,7 @@ function PatientDniAutocomplete(props) {
     onInputValueChange: onHookInput
   });
   const currentDni = value === null || value === void 0 ? "" : String(value).trim();
-  const lastSentRef = useRef4(null);
+  const lastSentRef = useRef5(null);
   useEffect3(() => {
     lastSentRef.current = null;
   }, [currentDni]);
@@ -29967,7 +29973,7 @@ function PatientDniAutocomplete(props) {
     lastSentRef.current = dni;
     onChange(dni, raw);
   };
-  const lastScanRef = useRef4(null);
+  const lastScanRef = useRef5(null);
   const [scanFailed, setScanFailed] = useState10(false);
   const resolveScan = (typed) => {
     if (typed === lastScanRef.current) return;
@@ -30159,10 +30165,10 @@ function WorksheetAutocomplete(props) {
 
 // src/ui/datepicker/DatePicker.tsx
 var import_react_dom2 = __toESM(require_react_dom(), 1);
-import { useEffect as useEffect5, useId as useId5, useRef as useRef6, useState as useState12 } from "react";
+import { useEffect as useEffect5, useId as useId5, useRef as useRef7, useState as useState12 } from "react";
 
 // src/ui/datepicker/Calendar.tsx
-import { useEffect as useEffect4, useRef as useRef5, useState as useState11 } from "react";
+import { useEffect as useEffect4, useRef as useRef6, useState as useState11 } from "react";
 
 // src/ui/datepicker/dateUtils.ts
 var MIN_YEAR = 1900;
@@ -30286,8 +30292,8 @@ function Calendar({ selected, onSelect, isDisabled, onEscape }) {
   const [view, setView] = useState11({ y: initial.y, m: initial.m });
   const [focusDay, setFocusDay] = useState11(initial);
   const [yearView, setYearView] = useState11(false);
-  const rootRef = useRef5(null);
-  const shouldFocus = useRef5(true);
+  const rootRef = useRef6(null);
+  const shouldFocus = useRef6(true);
   const weeks = monthGrid(view.y, view.m);
   useEffect4(() => {
     var _a, _b;
@@ -30507,15 +30513,15 @@ function DatePicker({
   });
   const [focused, setFocused] = useState12(false);
   const [open, setOpen] = useState12(false);
-  const buffer = useRef6("");
-  const sectionRefs = useRef6({
+  const buffer = useRef7("");
+  const sectionRefs = useRef7({
     day: null,
     month: null,
     year: null
   });
-  const anchorRef = useRef6(null);
-  const popoverRef = useRef6(null);
-  const toggleRef = useRef6(null);
+  const anchorRef = useRef7(null);
+  const popoverRef = useRef7(null);
+  const toggleRef = useRef7(null);
   const emit = (day, allEmpty) => {
     if (day) {
       if (!sameDay(day, parseValue(value))) onChange(formatOutput(day, outputFormat));
@@ -30737,6 +30743,558 @@ function DatePicker({
     )
   ] });
 }
+
+// src/ui/autocomplete/MultiAutocompletes.tsx
+import { useMemo as useMemo6 } from "react";
+
+// src/ui/autocomplete/MultiCombobox.tsx
+var import_react_dom3 = __toESM(require_react_dom(), 1);
+import { useCallback as useCallback3, useEffect as useEffect6, useId as useId6, useMemo as useMemo5, useRef as useRef8, useState as useState13 } from "react";
+import { jsx as jsx30, jsxs as jsxs19 } from "react/jsx-runtime";
+var optionKey2 = (option) => option.kind ? `${option.kind}-${option.id}` : option.id;
+function MultiCombobox({
+  search,
+  text,
+  onInputChange,
+  value,
+  onChange,
+  hideSelected = false,
+  limitTags,
+  showSecondary = false,
+  onKeyDown,
+  preventEnterWhileSearching = true,
+  label,
+  disabled = false,
+  error = false,
+  helperText,
+  placeholder,
+  size = "md",
+  required,
+  name,
+  id,
+  inputRef,
+  autoFocus,
+  loading = false,
+  noOptionsText = "Sin resultados",
+  loadingText = "Cargando\u2026",
+  listboxMinWidth,
+  className
+}) {
+  const autoId = useId6();
+  const baseId = id != null ? id : autoId;
+  const listId = `${baseId}-listbox`;
+  const optionId = (index) => `${baseId}-option-${index}`;
+  const helperId = `${baseId}-helper`;
+  const compact = size === "sm";
+  const innerRef = useRef8(null);
+  const anchorRef = useRef8(null);
+  const listRef = useRef8(null);
+  const chipButtons = useRef8(/* @__PURE__ */ new Map());
+  const setRefs = useCallback3(
+    (node) => {
+      innerRef.current = node;
+      if (typeof inputRef === "function") inputRef(node);
+      else if (inputRef) inputRef.current = node;
+    },
+    [inputRef]
+  );
+  const [open, setOpen] = useState13(false);
+  const [focused, setFocused] = useState13(false);
+  const [highlightedKey, setHighlightedKey] = useState13(null);
+  const valueKey = value.join("\0");
+  const { getOptionById } = search;
+  const selected = useMemo5(
+    () => (valueKey ? valueKey.split("\0") : []).map((optionIdValue) => getOptionById(optionIdValue)).filter((option) => Boolean(option)),
+    [valueKey, getOptionById]
+  );
+  const selectedIds = useMemo5(() => new Set(selected.map((option) => option.id)), [selected]);
+  const options = useMemo5(
+    () => hideSelected ? search.options.filter((option) => !selectedIds.has(option.id)) : search.options,
+    [hideSelected, search.options, selectedIds]
+  );
+  const highlightedIndex = highlightedKey === null ? -1 : options.findIndex((option) => optionKey2(option) === highlightedKey);
+  const textRef = useRef8(text);
+  textRef.current = text;
+  const onInputChangeRef = useRef8(onInputChange);
+  onInputChangeRef.current = onInputChange;
+  const previousValueKey = useRef8(void 0);
+  useEffect6(() => {
+    const changed = valueKey !== previousValueKey.current;
+    previousValueKey.current = valueKey;
+    if (changed && textRef.current !== "") onInputChangeRef.current("", "reset");
+  }, [valueKey]);
+  useEffect6(() => {
+    if (highlightedKey !== null && highlightedIndex === -1) setHighlightedKey(null);
+  }, [highlightedKey, highlightedIndex]);
+  useEffect6(() => {
+    var _a, _b;
+    if (!open || highlightedIndex < 0) return;
+    (_b = (_a = document.getElementById(optionId(highlightedIndex))) == null ? void 0 : _a.scrollIntoView) == null ? void 0 : _b.call(_a, { block: "nearest" });
+  }, [open, highlightedIndex]);
+  const handleOpen = () => {
+    if (open || disabled) return;
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+    setHighlightedKey(null);
+  };
+  const commit = (next) => {
+    onChange(
+      next.map((option) => option.id),
+      next.map((option) => option.raw)
+    );
+  };
+  const toggle = (option) => {
+    onInputChange("", "reset");
+    handleClose();
+    commit(selectedIds.has(option.id) ? selected.filter((item) => item.id !== option.id) : [...selected, option]);
+  };
+  const removeAt = (index) => commit(selected.filter((_, i) => i !== index));
+  const focusChip = (index) => {
+    var _a, _b;
+    const option = selected[index];
+    if (!option) {
+      (_a = innerRef.current) == null ? void 0 : _a.focus();
+      return;
+    }
+    (_b = chipButtons.current.get(option.id)) == null ? void 0 : _b.focus();
+  };
+  const moveHighlight = (step) => {
+    if (options.length === 0) return;
+    const last = options.length - 1;
+    let next;
+    if (highlightedIndex === -1) next = step > 0 ? 0 : last;
+    else next = highlightedIndex + step;
+    if (Math.abs(step) === 1) next = (next + options.length) % options.length;
+    else next = Math.min(last, Math.max(0, next));
+    setHighlightedKey(optionKey2(options[next]));
+  };
+  const handleKeyDown = (event) => {
+    onKeyDown == null ? void 0 : onKeyDown(event);
+    if (preventEnterWhileSearching && event.key === "Enter" && text.trim() !== "") event.preventDefault();
+    switch (event.key) {
+      case "ArrowDown":
+        event.preventDefault();
+        moveHighlight(1);
+        handleOpen();
+        break;
+      case "ArrowUp":
+        event.preventDefault();
+        moveHighlight(-1);
+        handleOpen();
+        break;
+      case "PageDown":
+        event.preventDefault();
+        moveHighlight(5);
+        handleOpen();
+        break;
+      case "PageUp":
+        event.preventDefault();
+        moveHighlight(-5);
+        handleOpen();
+        break;
+      case "Home":
+        if (open && highlightedIndex !== -1 && options.length > 0) {
+          event.preventDefault();
+          setHighlightedKey(optionKey2(options[0]));
+        }
+        break;
+      case "End":
+        if (open && highlightedIndex !== -1 && options.length > 0) {
+          event.preventDefault();
+          setHighlightedKey(optionKey2(options[options.length - 1]));
+        }
+        break;
+      case "Enter":
+        if (highlightedIndex !== -1 && open) {
+          event.preventDefault();
+          toggle(options[highlightedIndex]);
+        }
+        break;
+      case "Escape":
+        if (open) {
+          event.preventDefault();
+          event.stopPropagation();
+          handleClose();
+        }
+        break;
+      case "Backspace":
+        if (text === "" && selected.length > 0) removeAt(selected.length - 1);
+        break;
+      case "ArrowLeft":
+        if (text === "" && selected.length > 0) {
+          event.preventDefault();
+          focusChip(selected.length - 1);
+        }
+        break;
+      default:
+    }
+  };
+  const handleChipKeyDown = (index) => (event) => {
+    var _a;
+    switch (event.key) {
+      case "ArrowLeft":
+        event.preventDefault();
+        if (index > 0) focusChip(index - 1);
+        break;
+      case "ArrowRight":
+        event.preventDefault();
+        focusChip(index + 1);
+        break;
+      case "Backspace":
+      case "Delete":
+        event.preventDefault();
+        removeAt(index);
+        (_a = innerRef.current) == null ? void 0 : _a.focus();
+        break;
+      default:
+    }
+  };
+  const handleBlur = (event) => {
+    var _a, _b;
+    if (listRef.current && document.activeElement && listRef.current.contains(document.activeElement)) {
+      (_a = innerRef.current) == null ? void 0 : _a.focus();
+      return;
+    }
+    if ((_b = anchorRef.current) == null ? void 0 : _b.contains(event.relatedTarget)) return;
+    setFocused(false);
+    if (text !== "") onInputChange("", "reset");
+    handleClose();
+  };
+  const handleClear = () => {
+    var _a;
+    onInputChange("", "clear");
+    if (selected.length > 0) onChange([], []);
+    (_a = innerRef.current) == null ? void 0 : _a.focus();
+  };
+  const showClear = !disabled && (selected.length > 0 || text.length > 0);
+  const limited = !focused && limitTags !== void 0 && limitTags >= 0 && selected.length > limitTags;
+  const visibleChips = limited ? selected.slice(0, limitTags) : selected;
+  const hidden = selected.length - visibleChips.length;
+  const floated = focused || selected.length > 0 || text !== "";
+  const rect = useAnchorRect(open, anchorRef);
+  const showPopup = open && !disabled && (loading && options.length === 0 || options.length > 0 || !loading);
+  const below = rect ? window.innerHeight - rect.bottom : 0;
+  const above = rect ? rect.top : 0;
+  const placeBelow = !rect || below >= 200 || below >= above;
+  const listStyle = rect ? {
+    position: "fixed",
+    left: rect.left,
+    width: rect.width,
+    minWidth: listboxMinWidth,
+    maxWidth: "90vw",
+    maxHeight: Math.max(120, Math.min(window.innerHeight * 0.4, (placeBelow ? below : above) - 12)),
+    ...placeBelow ? { top: rect.bottom + 4 } : { bottom: window.innerHeight - rect.top + 4 }
+  } : { position: "fixed", visibility: "hidden" };
+  return /* @__PURE__ */ jsxs19("div", { className: cx("group w-full", className), children: [
+    /* @__PURE__ */ jsxs19(
+      "div",
+      {
+        ref: anchorRef,
+        onFocus: () => setFocused(true),
+        onBlur: handleBlur,
+        onClick: () => {
+          var _a;
+          if (!disabled) (_a = innerRef.current) == null ? void 0 : _a.focus();
+        },
+        className: cx(
+          "relative flex flex-wrap items-center gap-1 rounded-deva border bg-deva-surface py-1.5 pr-[5.25rem] pl-2.5 text-deva-ink transition-[border-color,box-shadow] duration-150",
+          compact ? "min-h-10 text-sm" : "min-h-14 text-base",
+          error ? "border-deva-danger focus-within:shadow-[inset_0_0_0_1px_var(--deva-danger)]" : "border-deva-ink-soft/50 hover:border-deva-ink-soft focus-within:border-deva-action focus-within:shadow-[inset_0_0_0_1px_var(--deva-action)]",
+          disabled && "opacity-60"
+        ),
+        children: [
+          /* @__PURE__ */ jsx30(
+            "label",
+            {
+              htmlFor: baseId,
+              className: cx(
+                compact ? "sr-only" : [
+                  "pointer-events-none absolute bg-deva-surface px-1 transition-all duration-150",
+                  floated ? "top-0 left-3 -translate-y-1/2 text-xs" : "top-1/2 left-3.5 -translate-y-1/2 text-base",
+                  floated && focused && !error ? "text-deva-action" : "text-deva-ink-soft"
+                ].join(" ")
+              ),
+              children: label
+            }
+          ),
+          visibleChips.map((option, index) => /* @__PURE__ */ jsxs19(
+            "span",
+            {
+              className: "inline-flex max-w-full items-center gap-1 rounded-full bg-deva-chip-bg py-0.5 pr-1 pl-3 text-sm text-deva-chip-ink",
+              children: [
+                /* @__PURE__ */ jsx30("span", { className: "truncate", children: option.label }),
+                !disabled && /* @__PURE__ */ jsx30(
+                  "button",
+                  {
+                    ref: (node) => {
+                      if (node) chipButtons.current.set(option.id, node);
+                      else chipButtons.current.delete(option.id);
+                    },
+                    type: "button",
+                    tabIndex: -1,
+                    "aria-label": `Quitar ${option.label}`,
+                    onClick: (event) => {
+                      event.stopPropagation();
+                      removeAt(index);
+                    },
+                    onKeyDown: handleChipKeyDown(index),
+                    className: "flex size-5 items-center justify-center rounded-full hover:bg-deva-ink-soft/20",
+                    children: /* @__PURE__ */ jsx30(CloseIcon, { className: "size-3.5" })
+                  }
+                ),
+                disabled && /* @__PURE__ */ jsx30("span", { className: "pr-2" })
+              ]
+            },
+            optionKey2(option)
+          )),
+          hidden > 0 && /* @__PURE__ */ jsxs19("span", { className: "px-1 text-sm text-deva-ink-soft", children: [
+            "+",
+            hidden
+          ] }),
+          /* @__PURE__ */ jsx30(
+            "input",
+            {
+              ref: setRefs,
+              id: baseId,
+              name,
+              required: required && selected.length === 0,
+              disabled,
+              autoFocus,
+              autoComplete: "off",
+              role: "combobox",
+              "aria-autocomplete": "list",
+              "aria-expanded": showPopup,
+              "aria-controls": showPopup ? listId : void 0,
+              "aria-activedescendant": open && highlightedIndex >= 0 ? optionId(highlightedIndex) : void 0,
+              "aria-invalid": error || void 0,
+              "aria-describedby": helperText ? helperId : void 0,
+              placeholder: compact || selected.length === 0 ? placeholder : void 0,
+              value: text,
+              onChange: (event) => {
+                const next = event.target.value;
+                if (next !== text) onInputChange(next, "input");
+                if (next !== "") handleOpen();
+              },
+              onKeyDown: handleKeyDown,
+              onMouseDown: () => {
+                if (!disabled && (text === "" || !open)) {
+                  if (open) handleClose();
+                  else handleOpen();
+                }
+              },
+              className: "min-w-[6rem] flex-1 bg-transparent py-1 outline-none placeholder:text-deva-ink-soft disabled:cursor-not-allowed"
+            }
+          ),
+          /* @__PURE__ */ jsxs19("span", { className: "absolute top-1/2 right-2 flex -translate-y-1/2 items-center", children: [
+            showClear && /* @__PURE__ */ jsx30(
+              "button",
+              {
+                type: "button",
+                tabIndex: -1,
+                "aria-label": "Borrar",
+                onMouseDown: (event) => event.preventDefault(),
+                onClick: (event) => {
+                  event.stopPropagation();
+                  handleClear();
+                },
+                className: "invisible flex size-8 items-center justify-center rounded-full text-deva-ink-soft group-focus-within:visible group-hover:visible hover:bg-deva-surface-2 hover:text-deva-ink",
+                children: /* @__PURE__ */ jsx30(CloseIcon, { className: "size-4" })
+              }
+            ),
+            /* @__PURE__ */ jsx30(
+              "button",
+              {
+                type: "button",
+                tabIndex: -1,
+                disabled,
+                "aria-label": open ? "Cerrar lista" : "Abrir lista",
+                onMouseDown: (event) => event.preventDefault(),
+                onClick: (event) => {
+                  var _a;
+                  event.stopPropagation();
+                  (_a = innerRef.current) == null ? void 0 : _a.focus();
+                  if (open) handleClose();
+                  else handleOpen();
+                },
+                className: "flex size-8 items-center justify-center rounded-full text-deva-ink-soft hover:bg-deva-surface-2 hover:text-deva-ink disabled:opacity-50",
+                children: /* @__PURE__ */ jsx30(ChevronDownIcon, { className: cx("size-4 transition-transform duration-150", open && "rotate-180") })
+              }
+            )
+          ] })
+        ]
+      }
+    ),
+    helperText && /* @__PURE__ */ jsx30("p", { id: helperId, className: cx("mt-1 ml-3.5 text-xs", error ? "text-deva-danger" : "text-deva-ink-soft"), children: helperText }),
+    showPopup && (0, import_react_dom3.createPortal)(
+      /* @__PURE__ */ jsx30(
+        "div",
+        {
+          style: listStyle,
+          className: "z-[1500] overflow-auto rounded-[10px] border border-deva-line bg-deva-surface py-1 font-deva text-deva-ink shadow-deva-md",
+          onMouseDown: (event) => event.preventDefault(),
+          children: options.length === 0 ? /* @__PURE__ */ jsx30("p", { role: "status", className: "px-4 py-3 text-sm text-deva-ink-soft", children: loading ? loadingText : noOptionsText }) : /* @__PURE__ */ jsx30("ul", { ref: listRef, id: listId, role: "listbox", "aria-label": label, "aria-multiselectable": "true", children: options.map((option, index) => {
+            const isSelected = selectedIds.has(option.id);
+            return /* @__PURE__ */ jsxs19(
+              "li",
+              {
+                id: optionId(index),
+                role: "option",
+                "aria-selected": isSelected,
+                onMouseMove: () => setHighlightedKey(optionKey2(option)),
+                onClick: () => toggle(option),
+                className: cx(
+                  "cursor-pointer px-4 py-2 text-sm",
+                  index === highlightedIndex && "bg-deva-surface-2",
+                  isSelected && "font-semibold text-deva-action"
+                ),
+                children: [
+                  /* @__PURE__ */ jsx30("span", { children: option.label }),
+                  showSecondary && option.secondary ? /* @__PURE__ */ jsx30("span", { className: "ml-2 font-normal text-deva-ink-soft", children: option.secondary }) : null
+                ]
+              },
+              optionKey2(option)
+            );
+          }) })
+        }
+      ),
+      document.body
+    )
+  ] });
+}
+
+// src/ui/autocomplete/MultiAutocompletes.tsx
+import { jsx as jsx31 } from "react/jsx-runtime";
+var INSURANCE_MULTI_NO_OPTIONS_TEXT = "Sin obras sociales";
+var INSURANCE_MULTI_LOADING_TEXT = "Cargando obras sociales\u2026";
+function InsuranceMultiAutocomplete(props) {
+  var _a, _b, _c;
+  const { value, onChange, insurances, suspendedCodes, getLabel, hideSelected, limitTags, ...field } = props;
+  const skin = useComboboxText();
+  const search = useInsuranceSearch({
+    source: { items: insurances },
+    suspendedCodes,
+    toOption: getLabel ? (insurance) => ({
+      id: entityId(insurance),
+      label: getLabel(insurance),
+      raw: insurance
+    }) : void 0,
+    inputValue: skin.filterText,
+    onInputValueChange: skin.onHookInput
+  });
+  return /* @__PURE__ */ jsx31(
+    MultiCombobox,
+    {
+      ...field,
+      search,
+      text: skin.text,
+      onInputChange: skin.onInputChange,
+      value,
+      onChange,
+      hideSelected,
+      limitTags,
+      showSecondary: true,
+      loading: (_a = field.loading) != null ? _a : !insurances,
+      noOptionsText: (_b = field.noOptionsText) != null ? _b : INSURANCE_MULTI_NO_OPTIONS_TEXT,
+      loadingText: (_c = field.loadingText) != null ? _c : INSURANCE_MULTI_LOADING_TEXT
+    }
+  );
+}
+var STUDY_MULTI_NO_OPTIONS_TEXT = "Sin resultados";
+var STUDY_MULTI_LOADING_TEXT = "Cargando estudios\u2026";
+function StudyMultiAutocomplete(props) {
+  var _a;
+  const {
+    value,
+    onChange,
+    studies,
+    includeSubItems,
+    excludeIds,
+    filter,
+    getLabel,
+    labelDeps,
+    hideSelected,
+    limitTags,
+    onEnter,
+    noOptionsText,
+    ...field
+  } = props;
+  const skin = useComboboxText();
+  const search = useStudySearch({
+    source: { items: studies },
+    includeSubItems,
+    excludeIds,
+    filter,
+    toOption: getLabel ? (study) => ({
+      id: entityId(study),
+      label: getLabel(study),
+      raw: study,
+      kind: "study"
+    }) : void 0,
+    deps: labelDeps,
+    inputValue: skin.filterText,
+    onInputValueChange: skin.onHookInput
+  });
+  const tools = useMemo6(
+    () => ({
+      findByExactCode: search.findByExactCode,
+      resolveExact: search.resolveExact,
+      reset: search.reset
+    }),
+    [search.findByExactCode, search.resolveExact, search.reset]
+  );
+  const handleKeyDown = (event) => {
+    if (event.key !== "Enter" || !onEnter) return;
+    event.preventDefault();
+    if (event.currentTarget.getAttribute("aria-activedescendant")) return;
+    onEnter(skin.text, tools);
+  };
+  return /* @__PURE__ */ jsx31(
+    MultiCombobox,
+    {
+      ...field,
+      search,
+      text: skin.text,
+      onInputChange: skin.onInputChange,
+      value,
+      onChange,
+      hideSelected,
+      limitTags,
+      onKeyDown: onEnter ? handleKeyDown : void 0,
+      preventEnterWhileSearching: !onEnter,
+      loading: (_a = field.loading) != null ? _a : !studies,
+      noOptionsText: noOptionsText != null ? noOptionsText : STUDY_MULTI_NO_OPTIONS_TEXT,
+      loadingText: STUDY_MULTI_LOADING_TEXT
+    }
+  );
+}
+var WORKSHEET_MULTI_NO_OPTIONS_TEXT = "Sin planillas";
+var WORKSHEET_MULTI_LOADING_TEXT = "Cargando planillas\u2026";
+function WorksheetMultiAutocomplete(props) {
+  var _a, _b, _c;
+  const { value, onChange, worksheets, ...field } = props;
+  const skin = useComboboxText();
+  const search = useWorksheetSearch({
+    source: { items: worksheets },
+    inputValue: skin.filterText,
+    onInputValueChange: skin.onHookInput
+  });
+  return /* @__PURE__ */ jsx31(
+    MultiCombobox,
+    {
+      ...field,
+      search,
+      text: skin.text,
+      onInputChange: skin.onInputChange,
+      value,
+      onChange,
+      loading: (_a = field.loading) != null ? _a : !worksheets,
+      noOptionsText: (_b = field.noOptionsText) != null ? _b : WORKSHEET_MULTI_NO_OPTIONS_TEXT,
+      loadingText: (_c = field.loadingText) != null ? _c : WORKSHEET_MULTI_LOADING_TEXT
+    }
+  );
+}
 export {
   Alert,
   AuthLayout,
@@ -30759,9 +31317,11 @@ export {
   FilterIcon,
   FilterToolbar,
   InsuranceAutocomplete,
+  InsuranceMultiAutocomplete,
   ListPage,
   LockIcon,
   LoginForm,
+  MultiCombobox,
   PasswordField,
   PasswordInput,
   PatientDniAutocomplete,
@@ -30771,12 +31331,14 @@ export {
   Spinner,
   StatusDot,
   StudyAutocomplete,
+  StudyMultiAutocomplete,
   TextField,
   Tip,
   UploadIcon,
   UserIcon,
   WarnIcon,
   WorksheetAutocomplete,
+  WorksheetMultiAutocomplete,
   useComboboxText
 };
 /*! Bundled license information:

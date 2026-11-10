@@ -38,7 +38,10 @@ export function SegmentedControl<T extends string>({
             key={option.value}
             type="button"
             aria-pressed={selected}
-            onClick={() => onChange(option.value)}
+            onClick={() => {
+              // Como el ToggleButtonGroup exclusivo de MUI: tocar la opción ya elegida no avisa.
+              if (!selected) onChange(option.value);
+            }}
             className={cx(
               'rounded-lg px-3 py-1.5 text-sm transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-deva-action',
               selected

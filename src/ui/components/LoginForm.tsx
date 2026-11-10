@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type ReactNode } from 'react';
+import { useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { Alert } from '../primitives/Alert';
 import { Button } from '../primitives/Button';
 import { UserIcon } from '../primitives/icons';
@@ -53,18 +53,23 @@ export function LoginForm({
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
+  // Enter en un campo envía el formulario aunque el botón esté bloqueado: el guard tiene que ser síncrono.
+  const inFlight = useRef(false);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    if (inFlight.current || loading) return;
     if (!username.trim() || !password) {
       setLocalError(requiredMessage);
       return;
     }
     setLocalError(null);
+    inFlight.current = true;
     setSubmitting(true);
     try {
       await onSubmit({ username: username.trim(), password });
     } finally {
+      inFlight.current = false;
       setSubmitting(false);
     }
   };

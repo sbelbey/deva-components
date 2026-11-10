@@ -709,4 +709,102 @@ interface CalendarProps {
  */
 declare function Calendar({ selected, onSelect, isDisabled, onEscape }: CalendarProps): react.JSX.Element;
 
-export { Alert, type AlertProps, AuthLayout, type AuthLayoutProps, BiochemistAutocomplete, type BiochemistAutocompleteProps, BrandLockup, type BrandLockupProps, Button, type ButtonProps, Calendar, type CalendarProps, Cell, ChevronDownIcon, ChevronRightIcon, CloseIcon, type ColorMode, ColorModeSwitch, type ColorModeSwitchProps, Combobox, type ComboboxFieldProps, type ComboboxProps, type ComboboxSearch, DataTable, type DataTableColumn, type DataTableProps, DatePicker, type DatePickerProps, DiagnosisAutocomplete, type DiagnosisAutocompleteProps, DoctorAutocomplete, type DoctorAutocompleteProps, EyeIcon, FileDropzone, type FileDropzoneProps, FilterIcon, FilterToolbar, type FilterToolbarProps, type InputChangeReason, InsuranceAutocomplete, type InsuranceAutocompleteProps, ListPage, type ListPageProps, LockIcon, type LoginCredentials, LoginForm, type LoginFormProps, PasswordField, type PasswordFieldProps, PasswordInput, type PasswordInputProps, PatientDniAutocomplete, type PatientDniAutocompleteProps, SearchField, type SearchFieldProps, SearchIcon, SegmentedControl, type SegmentedControlProps, type SegmentedOption, Spinner, type SpinnerProps, StatusDot, type StatusDotProps, StudyAutocomplete, type StudyAutocompleteProps, type StudyEnterTools, TextField, type TextFieldProps, Tip, type TipProps, UploadIcon, UserIcon, WarnIcon, WorksheetAutocomplete, type WorksheetAutocompleteProps, type WorksheetEnterTools, useComboboxText };
+interface InsuranceMultiAutocompleteProps<T extends InsuranceLike = InsuranceLike> extends ComboboxFieldProps {
+    /** Ids elegidos. */
+    value: readonly string[];
+    /** Ids y objetos de todo lo que queda elegido; nunca mientras se tipea. */
+    onChange: (ids: string[], raws: T[]) => void;
+    /** Lista de obras sociales. */
+    insurances: readonly T[] | null | undefined;
+    /** Codes suspendidos hoy: se ofrecen igual, marcadas «Suspendida». */
+    suspendedCodes?: readonly number[] | null;
+    /** Etiqueta propia (por defecto "code - abreviatura"). */
+    getLabel?: (insurance: T) => string;
+    /** No ofrecer las ya elegidas. */
+    hideSelected?: boolean;
+    limitTags?: number;
+}
+/**
+ * Varias obras sociales (misma lógica que `InsuranceMultiAutocomplete` de DEVA): chips con «quitar»,
+ * busca por code, abreviatura y nombre, y las suspendidas se ofrecen marcadas.
+ */
+declare function InsuranceMultiAutocomplete<T extends InsuranceLike = InsuranceLike>(props: InsuranceMultiAutocompleteProps<T>): react.JSX.Element;
+interface StudyMultiAutocompleteProps<T extends StudyLike = StudyLike> extends Omit<ComboboxFieldProps, 'noOptionsText' | 'loadingText'> {
+    /** Ids elegidos. */
+    value: readonly string[];
+    /** Ids y objetos de todo lo que queda elegido; nunca mientras se tipea. */
+    onChange: (ids: string[], raws: T[]) => void;
+    /** Lista de estudios (sin sub-ítems de compuestos, salvo `includeSubItems`). */
+    studies: readonly T[] | null | undefined;
+    /** Incluir los sub-ítems sintéticos de compuestos ("151…"). */
+    includeSubItems?: boolean;
+    /** Ids que no se ofrecen. */
+    excludeIds?: readonly string[];
+    /** Exclusión fija extra. */
+    filter?: (study: T) => boolean;
+    /** Etiqueta propia (por defecto "code - name"). */
+    getLabel?: (study: T) => string;
+    /** Si `getLabel` depende de algo que cambia, ponelo acá. */
+    labelDeps?: readonly unknown[];
+    /** No ofrecer los ya elegidos. */
+    hideSelected?: boolean;
+    limitTags?: number;
+    /**
+     * Enter en el input. Si se pasa, el Enter no envía el formulario y se llama con el texto tipeado (para
+     * agregar por code exacto o por atajo de perfil). Con una opción resaltada con las flechas el Enter la
+     * elige y `onEnter` no se llama.
+     */
+    onEnter?: (text: string, tools: StudyEnterTools<T>) => void;
+    noOptionsText?: React.ReactNode;
+}
+/** Varios estudios (misma lógica que `StudyMultiAutocomplete` de DEVA): chips con «quitar» y Enter por code exacto. */
+declare function StudyMultiAutocomplete<T extends StudyLike = StudyLike>(props: StudyMultiAutocompleteProps<T>): react.JSX.Element;
+interface WorksheetMultiAutocompleteProps<T extends WorksheetLike = WorksheetLike> extends ComboboxFieldProps {
+    /** Planillas de trabajo. */
+    worksheets: readonly T[] | null | undefined;
+    /** Ids elegidos. */
+    value: readonly string[];
+    /** Ids y objetos de todo lo que queda elegido; nunca mientras se tipea. */
+    onChange: (ids: string[], raws: T[]) => void;
+}
+/**
+ * Varias planillas de trabajo "code - name" (misma lógica que `WorksheetMultiAutocomplete` de DEVA):
+ * el valor son ids, busca por code y nombre sin acentos y elegir una ya elegida la quita.
+ */
+declare function WorksheetMultiAutocomplete<T extends WorksheetLike = WorksheetLike>(props: WorksheetMultiAutocompleteProps<T>): react.JSX.Element;
+
+interface MultiComboboxProps<T> extends ComboboxFieldProps {
+    search: ComboboxSearch<T>;
+    /** Texto del input (lo maneja `useComboboxText`). */
+    text: string;
+    onInputChange: (value: string, reason: InputChangeReason) => void;
+    /** Ids elegidos. */
+    value: readonly string[];
+    /** Se llama al elegir o quitar una opción, con todos los ids y objetos que quedan. Nunca mientras se tipea. */
+    onChange: (ids: string[], raws: T[]) => void;
+    /** No ofrecer las ya elegidas (como `filterSelectedOptions` de MUI). Sin esto, elegir una elegida la quita. */
+    hideSelected?: boolean;
+    /** Sin foco, muestra sólo esta cantidad de chips y un «+N» con el resto. */
+    limitTags?: number;
+    /** Muestra la `secondary` de cada opción (por ejemplo «Suspendida»). */
+    showSecondary?: boolean;
+    /** Teclas sobre el campo (por ejemplo, Enter para agregar por código exacto). */
+    onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
+    /** Enter mientras se está buscando (hay texto): no envía el formulario. Se apaga con un manejo propio del Enter. */
+    preventEnterWhileSearching?: boolean;
+}
+/**
+ * Base de los autocompletes de varios valores: lo elegido queda como chips con «quitar» dentro del
+ * campo y el texto sirve para seguir buscando. Se comporta como el Autocomplete `multiple` de MUI
+ * que usa DEVA.
+ *
+ * - El valor es un array de **ids**; `onChange` avisa ids y objetos de todo lo que queda.
+ * - Mientras se tipea no se avisa nada; al elegir se vacía el texto y se cierra la lista.
+ * - Retroceso con el texto vacío quita el último; con las flechas izquierda y derecha se recorren los
+ *   chips y Retroceso o Suprimir sobre uno lo quita.
+ * - `hideSelected` oculta lo elegido de la lista; si no, elegirlo de nuevo lo quita.
+ * - `limitTags` resume los chips cuando el campo no tiene el foco.
+ */
+declare function MultiCombobox<T>({ search, text, onInputChange, value, onChange, hideSelected, limitTags, showSecondary, onKeyDown, preventEnterWhileSearching, label, disabled, error, helperText, placeholder, size, required, name, id, inputRef, autoFocus, loading, noOptionsText, loadingText, listboxMinWidth, className, }: MultiComboboxProps<T>): react.JSX.Element;
+
+export { Alert, type AlertProps, AuthLayout, type AuthLayoutProps, BiochemistAutocomplete, type BiochemistAutocompleteProps, BrandLockup, type BrandLockupProps, Button, type ButtonProps, Calendar, type CalendarProps, Cell, ChevronDownIcon, ChevronRightIcon, CloseIcon, type ColorMode, ColorModeSwitch, type ColorModeSwitchProps, Combobox, type ComboboxFieldProps, type ComboboxProps, type ComboboxSearch, DataTable, type DataTableColumn, type DataTableProps, DatePicker, type DatePickerProps, DiagnosisAutocomplete, type DiagnosisAutocompleteProps, DoctorAutocomplete, type DoctorAutocompleteProps, EyeIcon, FileDropzone, type FileDropzoneProps, FilterIcon, FilterToolbar, type FilterToolbarProps, type InputChangeReason, InsuranceAutocomplete, type InsuranceAutocompleteProps, InsuranceMultiAutocomplete, type InsuranceMultiAutocompleteProps, ListPage, type ListPageProps, LockIcon, type LoginCredentials, LoginForm, type LoginFormProps, MultiCombobox, type MultiComboboxProps, PasswordField, type PasswordFieldProps, PasswordInput, type PasswordInputProps, PatientDniAutocomplete, type PatientDniAutocompleteProps, SearchField, type SearchFieldProps, SearchIcon, SegmentedControl, type SegmentedControlProps, type SegmentedOption, Spinner, type SpinnerProps, StatusDot, type StatusDotProps, StudyAutocomplete, type StudyAutocompleteProps, type StudyEnterTools, StudyMultiAutocomplete, type StudyMultiAutocompleteProps, TextField, type TextFieldProps, Tip, type TipProps, UploadIcon, UserIcon, WarnIcon, WorksheetAutocomplete, type WorksheetAutocompleteProps, type WorksheetEnterTools, WorksheetMultiAutocomplete, type WorksheetMultiAutocompleteProps, useComboboxText };
