@@ -75,3 +75,17 @@ export { DatePicker } from './datepicker/DatePicker';
 export type { DatePickerProps } from './datepicker/DatePicker';
 export { Calendar } from './datepicker/Calendar';
 export type { CalendarProps } from './datepicker/Calendar';
+
+// Autocompletes múltiples (varios valores, con chips).
+export {
+  InsuranceMultiAutocomplete,
+  StudyMultiAutocomplete,
+  WorksheetMultiAutocomplete,
+} from './autocomplete/MultiAutocompletes';
+export { MultiCombobox } from './autocomplete/MultiCombobox';
+export type { MultiComboboxProps } from './autocomplete/MultiCombobox';
+export type {
+  InsuranceMultiAutocompleteProps,
+  StudyMultiAutocompleteProps,
+  WorksheetMultiAutocompleteProps,
+} from './autocomplete/MultiAutocompletes';
