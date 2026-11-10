@@ -1,6 +1,6 @@
 # Changelog
 
-## [Sin publicar] (1.4.0)
+## [1.1.0] - 2026-11-09
 
 ### Agregado
 - Catálogo de componentes con Storybook 10 (`npm run storybook`): una página por hook de búsqueda (médico, estudio, diagnóstico, obra social, paciente con escaneo de DNI, bioquímico, planilla), modo claro/oscuro y revisión de accesibilidad. Estilos con Tailwind 4 y los tokens de `deva-design`. No cambia el paquete publicado (DEVA-233).
